@@ -1,5 +1,7 @@
 package com.gamestore.auth.DTOs;
 
+import java.util.Set;
+
 import lombok.*;
 
 @Data
@@ -12,4 +14,5 @@ public class UserResponseDto {
     private String firstName;
     private String lastName;
     private String phone;
+    private Set<String> roles;
 }

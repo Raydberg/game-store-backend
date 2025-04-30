@@ -3,14 +3,14 @@ package com.gamestore.auth.DTOs;
 import lombok.*;
 
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserRequestDto {
-    private Long id;
-    private String email;
     private String firstName;
     private String lastName;
+    private String email;
+    private String password;
     private String phone;
 }

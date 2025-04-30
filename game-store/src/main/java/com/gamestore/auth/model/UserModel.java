@@ -25,6 +25,7 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private String phone;
+    private String password;
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

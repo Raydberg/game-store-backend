@@ -47,12 +47,11 @@ public class UserService {
         UserModel updatedUser = userMapper.toEntity(updatedUserDto);
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setName(updatedUser.getName());
+                    // corregir setters según tu entidad:
+                    user.setFirstName(updatedUser.getFirstName());
                     user.setLastName(updatedUser.getLastName());
                     user.setEmail(updatedUser.getEmail());
-                    user.setPhoneNumber(updatedUser.getPhoneNumber());
-                    user.setPhotoUrl(updatedUser.getPhotoUrl());
-                    user.setBirthDate(updatedUser.getBirthDate());
+                    user.setPhone(updatedUser.getPhone());
                     return userRepository.save(user);
                 })
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario con ID " + id + " no encontrado."));

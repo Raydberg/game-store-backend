@@ -5,11 +5,12 @@ import com.gamestore.auth.DTOs.UserResponseDto;
 import com.gamestore.auth.model.RoleModel;
 import com.gamestore.auth.model.UserModel;
 import org.mapstruct.*;
-
+import com.gamestore.config.MapperConfig;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(componentModel = "spring", uses = {}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     UserModel toEntity(UserRequestDto dto);
@@ -21,11 +22,10 @@ public interface UserMapper {
 
     @Named("rolesToStringSet")
     default Set<String> rolesToStringSet(Set<RoleModel> roles) {
-        if (roles == null) {
-            return null;
-        }
-        return roles.stream()
-                .map(role -> role.getEnumRole().name())
+        return roles == null
+                ? Collections.emptySet()
+                : roles.stream()
+                .map(r -> r.getEnumRole().name())
                 .collect(Collectors.toSet());
     }
 }
