@@ -9,6 +9,7 @@ import com.gamestore.auth.jwt.JwtUtils;
 import com.gamestore.auth.model.UserModel;
 import com.gamestore.auth.repository.RoleRepository;
 import com.gamestore.auth.repository.UserRepository;
+import com.gamestore.auth.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,12 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
@@ -30,8 +32,9 @@ public class AuthServiceImpl {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
+    @Override
     @Transactional
-    public AuthResponseDto login(AuthLoginRequestDto dto) {
+    public AuthResponseDto loginUser(AuthLoginRequestDto dto) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.email(), dto.password())
         );
@@ -48,14 +51,19 @@ public class AuthServiceImpl {
         );
     }
 
+    @Override
     @Transactional
-    public AuthResponseRegisterDto register(UserRequestDto dto) {
+    public AuthResponseRegisterDto createUser(UserRequestDto dto) {
+        // Establecer explícitamente el tiempo de creación
+        Instant now = Instant.now();
+
         UserModel userEntity = UserModel.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .phone(dto.getPhone())
+                .createdAt(now)  // Establecer explícitamente el tiempo de creación
                 .roles(Set.of(
                         roleRepository.findByEnumRole(EnumRole.USER)
                                 .orElseThrow(() -> new IllegalStateException("Rol USER no existe"))
