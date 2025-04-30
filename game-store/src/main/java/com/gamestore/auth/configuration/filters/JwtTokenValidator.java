@@ -1,7 +1,7 @@
-package com.gamestore.auth.filters;
+package com.gamestore.auth.configuration.filters;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.gamestore.auth.jwt.JwtUtils;
+import com.gamestore.auth.configuration.jwt.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

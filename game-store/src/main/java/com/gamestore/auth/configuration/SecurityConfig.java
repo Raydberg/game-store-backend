@@ -1,7 +1,7 @@
 package com.gamestore.auth.configuration;
 
-import com.gamestore.auth.filters.JwtTokenValidator;
-import com.gamestore.auth.jwt.JwtUtils;
+import com.gamestore.auth.configuration.filters.JwtTokenValidator;
+import com.gamestore.auth.configuration.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -5,7 +5,7 @@ import com.gamestore.auth.DTOs.AuthResponseDto;
 import com.gamestore.auth.DTOs.AuthResponseRegisterDto;
 import com.gamestore.users.DTOs.UserRequestDto;
 import com.gamestore.auth.enums.EnumRole;
-import com.gamestore.auth.jwt.JwtUtils;
+import com.gamestore.auth.configuration.jwt.JwtUtils;
 import com.gamestore.users.model.UserModel;
 import com.gamestore.auth.repository.RoleRepository;
 import com.gamestore.auth.repository.UserRepository;
