@@ -21,12 +21,10 @@ public class DataLoader {
     }
     
     private void initRoles() {
-        // Verificar si ya existe rol USER
         if (roleRepository.findByEnumRole(EnumRole.USER).isEmpty()) {
             roleRepository.save(new RoleModel(EnumRole.USER));
         }
         
-        // Verificar si ya existe rol ADMIN
         if (roleRepository.findByEnumRole(EnumRole.ADMIN).isEmpty()) {
             roleRepository.save(new RoleModel(EnumRole.ADMIN));
         }

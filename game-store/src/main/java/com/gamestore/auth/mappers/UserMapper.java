@@ -5,7 +5,7 @@ import com.gamestore.auth.DTOs.UserResponseDto;
 import com.gamestore.auth.model.RoleModel;
 import com.gamestore.auth.model.UserModel;
 import org.mapstruct.*;
-import com.gamestore.config.MapperConfig;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;

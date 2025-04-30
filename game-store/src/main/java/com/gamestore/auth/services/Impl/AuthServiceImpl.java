@@ -54,7 +54,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponseRegisterDto createUser(UserRequestDto dto) {
-        // Establecer explícitamente el tiempo de creación
         Instant now = Instant.now();
 
         UserModel userEntity = UserModel.builder()
@@ -63,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .phone(dto.getPhone())
-                .createdAt(now)  // Establecer explícitamente el tiempo de creación
+                .createdAt(now)
                 .roles(Set.of(
                         roleRepository.findByEnumRole(EnumRole.USER)
                                 .orElseThrow(() -> new IllegalStateException("Rol USER no existe"))
