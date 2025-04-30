@@ -1,9 +1,9 @@
-package com.gamestore.auth.mappers;
+package com.gamestore.users.mappers;
 
-import com.gamestore.auth.DTOs.UserRequestDto;
-import com.gamestore.auth.DTOs.UserResponseDto;
+import com.gamestore.users.DTOs.UserRequestDto;
+import com.gamestore.users.DTOs.UserResponseDto;
 import com.gamestore.auth.model.RoleModel;
-import com.gamestore.auth.model.UserModel;
+import com.gamestore.users.model.UserModel;
 import org.mapstruct.*;
 
 import java.util.Collections;

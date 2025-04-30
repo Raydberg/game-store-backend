@@ -3,7 +3,7 @@ package com.gamestore.auth.controller;
 import com.gamestore.auth.DTOs.AuthLoginRequestDto;
 import com.gamestore.auth.DTOs.AuthResponseDto;
 import com.gamestore.auth.DTOs.AuthResponseRegisterDto;
-import com.gamestore.auth.DTOs.UserRequestDto;
+import com.gamestore.users.DTOs.UserRequestDto;
 import com.gamestore.auth.services.Impl.AuthServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

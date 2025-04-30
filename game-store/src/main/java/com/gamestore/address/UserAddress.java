@@ -1,6 +1,6 @@
 package com.gamestore.address;
 
-import com.gamestore.auth.model.UserModel;
+import com.gamestore.users.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,10 +1,10 @@
-package com.gamestore.auth.services;
+package com.gamestore.users.services;
 
-import com.gamestore.auth.DTOs.UserPageResponse;
-import com.gamestore.auth.DTOs.UserRequestDto;
-import com.gamestore.auth.DTOs.UserResponseDto;
-import com.gamestore.auth.mappers.UserMapper;
-import com.gamestore.auth.model.UserModel;
+import com.gamestore.users.DTOs.UserPageResponse;
+import com.gamestore.users.DTOs.UserRequestDto;
+import com.gamestore.users.DTOs.UserResponseDto;
+import com.gamestore.users.mappers.UserMapper;
+import com.gamestore.users.model.UserModel;
 import com.gamestore.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,6 +63,5 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
-
 
 }

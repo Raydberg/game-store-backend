@@ -1,7 +1,7 @@
 package com.gamestore.order;
 
 import com.gamestore.address.UserAddress;
-import com.gamestore.auth.model.UserModel;
+import com.gamestore.users.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 

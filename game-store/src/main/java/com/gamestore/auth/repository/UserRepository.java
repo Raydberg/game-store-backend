@@ -1,6 +1,6 @@
 package com.gamestore.auth.repository;
 
-import com.gamestore.auth.model.UserModel;
+import com.gamestore.users.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

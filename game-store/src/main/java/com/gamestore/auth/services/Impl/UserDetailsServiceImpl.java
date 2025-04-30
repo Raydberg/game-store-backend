@@ -1,6 +1,6 @@
 package com.gamestore.auth.services.Impl;
 
-import com.gamestore.auth.model.UserModel;
+import com.gamestore.users.model.UserModel;
 import com.gamestore.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

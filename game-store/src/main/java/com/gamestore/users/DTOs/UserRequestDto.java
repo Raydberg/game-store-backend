@@ -1,4 +1,4 @@
-package com.gamestore.auth.DTOs;
+package com.gamestore.users.DTOs;
 
 import lombok.*;
 

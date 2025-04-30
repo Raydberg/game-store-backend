@@ -1,13 +1,12 @@
 package com.gamestore.users.controller;
 
-import com.gamestore.auth.DTOs.UserPageResponse;
-import com.gamestore.auth.DTOs.UserRequestDto;
-import com.gamestore.auth.DTOs.UserResponseDto;
-import com.gamestore.auth.mappers.UserMapper;
-import com.gamestore.auth.model.UserModel;
-import com.gamestore.auth.services.UserService;
+import com.gamestore.users.DTOs.UserPageResponse;
+import com.gamestore.users.DTOs.UserRequestDto;
+import com.gamestore.users.DTOs.UserResponseDto;
+import com.gamestore.users.mappers.UserMapper;
+import com.gamestore.users.model.UserModel;
+import com.gamestore.users.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

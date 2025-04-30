@@ -1,6 +1,7 @@
-package com.gamestore.auth.model;
+package com.gamestore.users.model;
 
 import com.gamestore.address.UserAddress;
+import com.gamestore.auth.model.RoleModel;
 import com.gamestore.cart.Cart;
 import com.gamestore.order.Order;
 import jakarta.persistence.*;
