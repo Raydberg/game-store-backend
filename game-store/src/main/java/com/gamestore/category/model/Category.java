@@ -4,6 +4,7 @@ import com.gamestore.product.model.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -19,6 +20,7 @@ public class Category {
 
     private String name;
     private String description;
+    private Instant createAt = Instant.now();
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
