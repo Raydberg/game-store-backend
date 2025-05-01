@@ -1,48 +1,76 @@
 package com.gamestore.cart.controllers;
 
+import com.gamestore.cart.DTOs.CartItemRequestDto;
+import com.gamestore.cart.DTOs.CartResponseDto;
 import com.gamestore.cart.services.CartService;
-import jakarta.validation.constraints.Min;
+import com.gamestore.config.helpers.AuthenticationHelper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cart")
 @RequiredArgsConstructor
-@Validated
 public class CartController {
     private final CartService cartService;
+    private final AuthenticationHelper authHelper;
 
-    @GetMapping("")
-    public ResponseEntity<?> getAllCartShop(
-            @RequestParam(defaultValue = "0") @Min(value = 0, message = "La página debe ser 0 o mayor") int page,
-            @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1") int size
-    ) {
-        return ResponseEntity.ok("");
+    /**
+     * Obtiene el carrito del usuario autenticado
+     */
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartResponseDto> getMyCart() {
+        Long userId = authHelper.getCurrentUserId();
+        CartResponseDto cart = cartService.getUserCart(userId);
+        return ResponseEntity.ok(cart);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getCartById(@PathVariable Long id) {
-        return ResponseEntity.ok("");
+    /**
+     * Agrega un producto al carrito
+     */
+    @PostMapping("/items")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartResponseDto> addItemToCart(@Valid @RequestBody CartItemRequestDto dto) {
+        Long userId = authHelper.getCurrentUserId();
+        CartResponseDto updatedCart = cartService.addItemToCart(userId, dto);
+        return ResponseEntity.ok(updatedCart);
     }
 
-
-    @PostMapping("")
-    public ResponseEntity<?> create() {
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+    /**
+     * Actualiza la cantidad de un producto en el carrito
+     */
+    @PutMapping("/items/{itemId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartResponseDto> updateCartItem(
+            @PathVariable Long itemId,
+            @RequestParam int quantity) {
+        Long userId = authHelper.getCurrentUserId();
+        CartResponseDto updatedCart = cartService.updateCartItemQuantity(userId, itemId, quantity);
+        return ResponseEntity.ok(updatedCart);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id) {
-        return ResponseEntity.ok("");
+    /**
+     * Elimina un producto del carrito
+     */
+    @DeleteMapping("/items/{itemId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CartResponseDto> removeCartItem(@PathVariable Long itemId) {
+        Long userId = authHelper.getCurrentUserId();
+        CartResponseDto updatedCart = cartService.removeCartItem(userId, itemId);
+        return ResponseEntity.ok(updatedCart);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    /**
+     * Vacía el carrito
+     */
+    @DeleteMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> clearCart() {
+        Long userId = authHelper.getCurrentUserId();
+        cartService.clearCart(userId);
         return ResponseEntity.noContent().build();
     }
-
-
 }

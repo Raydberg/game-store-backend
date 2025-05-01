@@ -14,7 +14,7 @@ import java.time.Instant;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
@@ -24,5 +24,6 @@ public class Payment {
     private String method;
 
     @Column(name = "paid_at")
+    @Builder.Default
     private Instant paidAt = Instant.now();
 }
