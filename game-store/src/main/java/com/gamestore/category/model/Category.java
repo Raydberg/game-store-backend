@@ -4,6 +4,7 @@ import com.gamestore.product.model.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -15,10 +16,11 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name;
     private String description;
+    private Instant createAt = Instant.now();
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;

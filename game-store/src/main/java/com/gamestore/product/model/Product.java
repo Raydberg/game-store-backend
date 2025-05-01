@@ -6,6 +6,7 @@ import com.gamestore.order.model.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -22,10 +23,11 @@ public class Product {
 
     private String name;
     private String description;
-    private java.math.BigDecimal price;
+    private String imageUrl;
+    private BigDecimal price;
     private Integer stock;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private Instant createdAt = Instant.now();
 
     @ManyToOne
