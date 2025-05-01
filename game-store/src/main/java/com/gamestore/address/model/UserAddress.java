@@ -1,4 +1,4 @@
-package com.gamestore.address;
+package com.gamestore.address.model;
 
 import com.gamestore.users.model.UserModel;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
-package com.gamestore.cart;
+package com.gamestore.cart.model;
 
-import com.gamestore.product.Product;
+import com.gamestore.product.model.Product;
 import jakarta.persistence.*;
 import lombok.*;
 

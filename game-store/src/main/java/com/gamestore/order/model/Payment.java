@@ -1,10 +1,9 @@
-package com.gamestore.order;
+package com.gamestore.order.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

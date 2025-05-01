@@ -1,9 +1,9 @@
 package com.gamestore.users.model;
 
-import com.gamestore.address.UserAddress;
+import com.gamestore.address.model.UserAddress;
 import com.gamestore.auth.model.RoleModel;
-import com.gamestore.cart.Cart;
-import com.gamestore.order.Order;
+import com.gamestore.cart.model.Cart;
+import com.gamestore.order.model.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
