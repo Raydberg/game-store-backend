@@ -1,4 +1,13 @@
 package com.gamestore.product.DTOs;
 
-public record ProductRequestDto() {
+import java.math.BigDecimal;
+
+public record ProductRequestDto(
+        String name,
+        String description,
+        String imageUrl,
+        BigDecimal price,
+        Integer stock,
+        Long categoryId
+) {
 }
