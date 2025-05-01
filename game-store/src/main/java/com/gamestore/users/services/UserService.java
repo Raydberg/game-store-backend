@@ -13,5 +13,7 @@ public interface UserService {
 
     UserModel updateUser(Long id, UserRequestDto updatedUserDto);
 
+    UserResponseDto toggleAdminRole(Long id, boolean isAdmin);
+
     void deleteUser(Long id);
 }

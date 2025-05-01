@@ -8,6 +8,7 @@ import com.gamestore.users.model.UserModel;
 import com.gamestore.users.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -40,6 +41,17 @@ public class UserController {
     ) {
         UserModel updated = userService.updateUser(id, dto);
         return ResponseEntity.ok(userMapper.toDtoUser(updated));
+    }
+
+    @PatchMapping("/{id}/toggle-admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDto> toggleAdminRole(
+            @PathVariable Long id,
+            @RequestParam boolean idAdmin
+
+    ) {
+        UserResponseDto updateUser = userService.toggleAdminRole(id, idAdmin);
+        return ResponseEntity.ok(updateUser);
     }
 
     @DeleteMapping("/{id}")

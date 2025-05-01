@@ -1,5 +1,8 @@
 package com.gamestore.users.services.Impl;
 
+import com.gamestore.auth.enums.EnumRole;
+import com.gamestore.auth.model.RoleModel;
+import com.gamestore.auth.repository.RoleRepository;
 import com.gamestore.users.DTOs.UserPageResponse;
 import com.gamestore.users.DTOs.UserRequestDto;
 import com.gamestore.users.DTOs.UserResponseDto;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +29,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserPageResponse getAllUsers(int page, int size) {
@@ -66,6 +71,38 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.save(existingUser);
+    }
+
+    @Override
+    @Transactional
+    public UserResponseDto toggleAdminRole(Long id, boolean isAdmin) {
+        UserModel user = findUserOrThrow(id);
+        Set<RoleModel> roles = user.getRoles();
+
+        boolean hasAdminRole = roles.stream()
+                .anyMatch(role -> role.getEnumRole() == EnumRole.ADMIN);
+
+        if (isAdmin != hasAdminRole) {
+            if (isAdmin) {
+                roleRepository.findByEnumRole(EnumRole.ADMIN)
+                        .ifPresent(roles::add);
+            } else {
+                roles.removeIf(role -> role.getEnumRole() == EnumRole.ADMIN);
+
+                boolean hasUserRole = roles.stream()
+                        .anyMatch(role -> role.getEnumRole() == EnumRole.USER);
+
+                if (!hasUserRole) {
+                    roleRepository.findByEnumRole(EnumRole.USER)
+                            .ifPresent(roles::add);
+                }
+            }
+
+            user.setRoles(roles);
+            user = userRepository.save(user);
+        }
+
+        return userMapper.toDtoUser(user);
     }
 
     @Override
