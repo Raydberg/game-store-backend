@@ -20,6 +20,7 @@ public class Category {
 
     private String name;
     private String description;
+    @Builder.Default
     private Instant createAt = Instant.now();
 
     @OneToMany(mappedBy = "category")
