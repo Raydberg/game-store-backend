@@ -6,8 +6,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressResponseDto {
-    private Integer id;
-    private Long user;
+    private Long id;
+//    private Long user;
     private String city;
     private String state;
     private String postalCode;

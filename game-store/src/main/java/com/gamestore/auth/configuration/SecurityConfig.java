@@ -38,13 +38,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/auth/**", "/swagger-ui/**",
-//                                "/v3/api-docs/**", "/**").permitAll()
-                        .anyRequest().permitAll()
-                )
+                        // .requestMatchers("/auth/**", "/swagger-ui/**",
+                        // "/v3/api-docs/**", "/**").permitAll()
+                        .requestMatchers("/addresses/**").authenticated()
+                        .anyRequest().permitAll())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 

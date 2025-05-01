@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -12,7 +13,7 @@ import lombok.*;
 public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
