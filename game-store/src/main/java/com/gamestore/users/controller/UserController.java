@@ -1,6 +1,8 @@
 package com.gamestore.users.controller;
 
+import com.gamestore.config.helpers.AuthenticationHelper;
 import com.gamestore.users.DTOs.UserPageResponse;
+import com.gamestore.users.DTOs.UserProfileDto;
 import com.gamestore.users.DTOs.UserRequestDto;
 import com.gamestore.users.DTOs.UserResponseDto;
 import com.gamestore.users.mappers.UserMapper;
@@ -20,6 +22,15 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final AuthenticationHelper authHelper;
+
+    @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserProfileDto> getMyProfile() {
+        UserModel currentUser = authHelper.getCurrentUser();
+        UserProfileDto profile = userMapper.toProfileDto(currentUser);
+        return ResponseEntity.ok(profile);
+    }
 
     @GetMapping
     public ResponseEntity<UserPageResponse> getAll(
