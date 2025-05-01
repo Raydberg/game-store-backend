@@ -1,5 +1,8 @@
 package com.gamestore.category.controllers;
 
+import com.gamestore.category.DTOs.CategoryPageResponseDto;
+import com.gamestore.category.DTOs.CategoryRequestDto;
+import com.gamestore.category.DTOs.CategoryResponseDto;
 import com.gamestore.category.services.CategoryService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -16,31 +19,36 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllCartShop(
+    public ResponseEntity<CategoryPageResponseDto> getAllCartShop(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "La página debe ser 0 o mayor") int page,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1") int size
     ) {
-        return ResponseEntity.ok("");
+        var response = categoryService.findAllCategory(page, size);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getCartById(@PathVariable Long id) {
-        return ResponseEntity.ok("");
+    public ResponseEntity<CategoryResponseDto> getCartById(@PathVariable Long id) {
+        var response = categoryService.findCategoryById(id);
+        return ResponseEntity.ok(response);
     }
 
 
     @PostMapping("")
-    public ResponseEntity<?> create() {
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+    public ResponseEntity<CategoryResponseDto> create(@RequestBody CategoryRequestDto dto) {
+        var response = categoryService.saveCategory(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id) {
-        return ResponseEntity.ok("");
+    public ResponseEntity<CategoryResponseDto> update(@PathVariable Long id, @RequestBody CategoryRequestDto dto) {
+        var result = categoryService.updateCategory(id, dto);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 

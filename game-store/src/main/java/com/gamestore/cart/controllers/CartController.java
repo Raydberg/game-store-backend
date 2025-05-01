@@ -23,7 +23,7 @@ public class CartController {
         return ResponseEntity.ok("");
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getCartById(@PathVariable Long id) {
         return ResponseEntity.ok("");
     }
@@ -34,12 +34,12 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id) {
         return ResponseEntity.ok("");
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return ResponseEntity.noContent().build();
     }
