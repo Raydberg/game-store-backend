@@ -17,9 +17,7 @@ public class CartController {
     private final CartService cartService;
     private final AuthenticationHelper authHelper;
 
-    /**
-     * Obtiene el carrito del usuario autenticado
-     */
+
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartResponseDto> getMyCart() {
@@ -28,9 +26,7 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    /**
-     * Agrega un producto al carrito
-     */
+
     @PostMapping("/items")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartResponseDto> addItemToCart(@Valid @RequestBody CartItemRequestDto dto) {
@@ -39,9 +35,7 @@ public class CartController {
         return ResponseEntity.ok(updatedCart);
     }
 
-    /**
-     * Actualiza la cantidad de un producto en el carrito
-     */
+
     @PutMapping("/items/{itemId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartResponseDto> updateCartItem(
@@ -52,9 +46,7 @@ public class CartController {
         return ResponseEntity.ok(updatedCart);
     }
 
-    /**
-     * Elimina un producto del carrito
-     */
+
     @DeleteMapping("/items/{itemId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CartResponseDto> removeCartItem(@PathVariable Long itemId) {
@@ -63,9 +55,7 @@ public class CartController {
         return ResponseEntity.ok(updatedCart);
     }
 
-    /**
-     * Vacía el carrito
-     */
+
     @DeleteMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> clearCart() {
