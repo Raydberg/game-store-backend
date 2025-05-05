@@ -35,8 +35,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserPageResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+            @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(userService.getAllUsers(page, size));
     }
 
@@ -48,14 +47,13 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> update(
             @PathVariable Long id,
-            @Valid @RequestBody UserRequestDto dto
-    ) {
+            @Valid @RequestBody UserRequestDto dto) {
         UserModel updated = userService.updateUser(id, dto);
         return ResponseEntity.ok(userMapper.toDtoUser(updated));
     }
 
     @PatchMapping("/{id}/toggle-admin")
-//    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> toggleAdminRole(
             @PathVariable Long id,
             @RequestParam boolean idAdmin
@@ -69,5 +67,15 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/status")
+    // @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDto> updateUserStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active) {
+
+        UserResponseDto updatedUser = userService.updateUserStatus(id, active);
+        return ResponseEntity.ok(updatedUser);
     }
 }

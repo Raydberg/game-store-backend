@@ -31,6 +31,9 @@ public class UserModel {
     private List<Order> orders;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean active = true;
     @OneToMany(mappedBy = "user")
     private List<UserAddress> addresses;
     @Column(name = "created_at", nullable = false)

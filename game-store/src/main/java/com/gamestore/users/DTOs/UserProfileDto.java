@@ -15,5 +15,6 @@ public class UserProfileDto {
     private String lastName;
     private String phone;
     private Set<String> roles;
-    private AddressResponseDto address;  // Puede ser null si el usuario no tiene dirección
+    private AddressResponseDto address; 
+    private boolean active;
 }

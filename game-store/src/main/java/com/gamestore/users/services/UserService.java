@@ -16,4 +16,7 @@ public interface UserService {
     UserResponseDto toggleAdminRole(Long id, boolean isAdmin);
 
     void deleteUser(Long id);
+
+    UserResponseDto updateUserStatus(Long id, boolean active);
+
 }
