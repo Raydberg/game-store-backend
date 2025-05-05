@@ -1,16 +1,39 @@
-insert into categories (name,description)
-values
-    ('Categoria 1','Descripcion da categoria 1'),
-    ('Categoria 2','Descripcion da categoria 2'),
-    ('Categoria 3','Descripcion da categoria 3'),
-    ('Categoria 4','Descripcion da categoria 4'),
-    ('Categoria 5','Descripcion da categoria 5');
+INSERT INTO categories (name, description)
+VALUES
+    ('Smartphones',            'Dispositivos móviles inteligentes con pantallas táctiles, conectividad 4G/5G y cámaras avanzadas'),
+    ('Laptops & Computers',    'Ordenadores portátiles y de sobremesa para uso profesional, gaming y multimedia'),
+    ('Wearables',              'Tecnología vestible como smartwatches, pulseras de actividad y auriculares inteligentes'),
+    ('Networking & Storage',   'Equipos de red y soluciones de almacenamiento, incluyendo routers, switches y discos SSD/HDD'),
+    ('Accessories & Peripherals','Accesorios y periféricos: cargadores, teclados, ratones, fundas y adaptadores');
 
-insert into products (price, stock, category_id, description, image_url, name)
-VALUES (45.5,12,1,'Descripcion do produto 1','https://example.com/image1.jpg','Produto 1'),
-       (25.0,5,2,'Descripcion do produto 2','https://example.com/image2.jpg','Produto 2'),
-       (15.0,8,3,'Descripcion do produto 3','https://example.com/image3.jpg','Produto 3'),
-       (30.0,10,4,'Descripcion do produto 4','https://example.com/image4.jpg','Produto 4'),
-       (50.0,20,5,'Descripcion do produto 5','https://example.com/image5.jpg','Produto 5');
+INSERT INTO products (price, stock, category_id, description, image_url, name)
+VALUES
+    -- Smartphone gama alta
+    (799.99, 25, 1,
+     'Smartphone flagship con pantalla OLED de 6.7”, procesador octa‑core y triple cámara de 108 MP',
+     'https://picsum.photos/seed/smartphone/600/400.jpg',
+     'UltraPhone X Pro'),
 
+    -- Portátil ultraligero
+    (1299.00, 15, 2,
+     'Ultrabook de 14” con chasis de aluminio, 16 GB RAM, SSD NVMe de 1 TB y batería de larga duración',
+     'https://picsum.photos/seed/laptop/600/400.jpg',
+     'SlimBook 14 Aero'),
 
+    -- Smartwatch avanzado
+    (249.50, 40, 3,
+     'Reloj inteligente con monitor de ritmo cardíaco, GPS integrado, notificaciones y resistencia al agua 5 ATM',
+     'https://picsum.photos/seed/wearable/600/400.jpg',
+     'TimeFit Pro Watch'),
+
+    -- Router Wi‑Fi 6 Mesh
+    (179.99, 30, 4,
+     'Sistema de red mesh Wi‑Fi 6 con cobertura de hasta 500 m², cuatro antenas y velocidades de 3 Gbps',
+     'https://picsum.photos/seed/networking/600/400.jpg',
+     'MeshNet X3 Router'),
+
+    -- Auriculares inalámbricos
+    (129.00, 50, 5,
+     'Auriculares true wireless con cancelación activa de ruido, autonomía de 30 h y estuche de carga rápida',
+     'https://picsum.photos/seed/accessory/600/400.jpg',
+     'SoundBuds ANC');

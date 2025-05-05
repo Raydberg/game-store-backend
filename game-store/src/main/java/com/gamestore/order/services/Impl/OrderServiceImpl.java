@@ -158,8 +158,7 @@ public class OrderServiceImpl implements OrderService {
                 orderSummaries,
                 ordersPage.getNumber(),
                 ordersPage.getTotalElements(),
-                ordersPage.getTotalPages()
-        );
+                ordersPage.getTotalPages());
     }
 
     @Override
@@ -180,8 +179,7 @@ public class OrderServiceImpl implements OrderService {
                 orderSummaries,
                 ordersPage.getNumber(),
                 ordersPage.getTotalElements(),
-                ordersPage.getTotalPages()
-        );
+                ordersPage.getTotalPages());
     }
 
     @Override
@@ -211,5 +209,64 @@ public class OrderServiceImpl implements OrderService {
         return cartItems.stream()
                 .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public OrderSummaryResponseDto getLastOrderByUser(Long userId) {
+        Order lastOrder = orderRepository.findTopByUserIdOrderByCreatedAtDesc(userId)
+                .orElseThrow(() -> new RuntimeException("No se encontraron órdenes para el usuario"));
+
+        List<OrderItem> orderItems = orderItemRepository.findByOrderId(lastOrder.getId());
+        Payment payment = paymentRepository.findByOrderId(lastOrder.getId()).orElse(null);
+
+        return orderMapper.toOrderSummaryResponseDto(lastOrder, orderItems, payment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public OrderPageResponseDto getLatestOrdersForAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Order> latestOrders = orderRepository.findLatestOrdersForAllUsers(pageable);
+
+        List<OrderSummaryResponseDto> orderSummaries = latestOrders.stream()
+                .map(order -> {
+                    List<OrderItem> items = orderItemRepository.findByOrderId(order.getId());
+                    Payment payment = paymentRepository.findByOrderId(order.getId()).orElse(null);
+                    return orderMapper.toOrderSummaryResponseDto(order, items, payment);
+                })
+                .collect(Collectors.toList());
+
+        // Como no tenemos un Page<> directamente, calculamos el total de elementos
+        // contando usuarios distintos con órdenes
+        long totalUsers = userRepository.count(); // Esto es una aproximación
+
+        return new OrderPageResponseDto(
+                orderSummaries,
+                page,
+                totalUsers,
+                (int) Math.ceil((double) totalUsers / size));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public OrderPageResponseDto getRecentOrders(int page, int size) {
+        // Ordenar por fecha de creación descendente (más recientes primero)
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Order> ordersPage = orderRepository.findAll(pageable);
+
+        List<OrderSummaryResponseDto> orderSummaries = ordersPage.getContent().stream()
+                .map(order -> {
+                    List<OrderItem> items = orderItemRepository.findByOrderId(order.getId());
+                    Payment payment = paymentRepository.findByOrderId(order.getId()).orElse(null);
+                    return orderMapper.toOrderSummaryResponseDto(order, items, payment);
+                })
+                .collect(Collectors.toList());
+
+        return new OrderPageResponseDto(
+                orderSummaries,
+                ordersPage.getNumber(),
+                ordersPage.getTotalElements(),
+                ordersPage.getTotalPages());
     }
 }

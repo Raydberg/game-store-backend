@@ -22,9 +22,6 @@ public class OrderController {
     private final OrderService orderService;
     private final AuthenticationHelper authHelper;
 
-    /**
-     * Crea una nueva orden a partir del carrito actual del usuario
-     */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<OrderSummaryResponseDto> createOrder(@Valid @RequestBody OrderRequestDto orderRequest) {
@@ -33,9 +30,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
-    /**
-     * Obtiene todas las órdenes del usuario autenticado
-     */
     @GetMapping("/my-orders")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<OrderPageResponseDto> getMyOrders(
@@ -46,9 +40,6 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    /**
-     * Obtiene el detalle de una orden específica del usuario autenticado
-     */
     @GetMapping("/my-orders/{orderId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<OrderSummaryResponseDto> getMyOrderById(@PathVariable Long orderId) {
@@ -57,11 +48,8 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    /**
-     * Obtiene todas las órdenes (solo admin)
-     */
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderPageResponseDto> getAllOrders(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
@@ -69,25 +57,60 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    /**
-     * Obtiene el detalle de cualquier orden (solo admin)
-     */
     @GetMapping("/{orderId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderSummaryResponseDto> getOrderById(@PathVariable Long orderId) {
         OrderSummaryResponseDto order = orderService.getOrderById(orderId, null); // null indica que es admin
         return ResponseEntity.ok(order);
     }
 
-    /**
-     * Actualiza el estado de una orden (solo admin)
-     */
     @PatchMapping("/{orderId}/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderSummaryResponseDto> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam String status) {
         OrderSummaryResponseDto updatedOrder = orderService.updateOrderStatus(orderId, status);
         return ResponseEntity.ok(updatedOrder);
+    }
+
+    @GetMapping("/users/{userId}/latest")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<OrderSummaryResponseDto> getLatestOrderByUser(@PathVariable Long userId) {
+        try {
+            OrderSummaryResponseDto order = orderService.getLastOrderByUser(userId);
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/my-latest-order")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<OrderSummaryResponseDto> getMyLatestOrder() {
+        Long userId = authHelper.getCurrentUserId();
+        try {
+            OrderSummaryResponseDto order = orderService.getLastOrderByUser(userId);
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/latest-by-user")
+    // @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<OrderPageResponseDto> getLatestOrdersByUser(
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) int size) {
+        OrderPageResponseDto orders = orderService.getLatestOrdersForAllUsers(page, size);
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/recent")
+    // @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<OrderPageResponseDto> getRecentOrders(
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) int size) {
+        OrderPageResponseDto orders = orderService.getRecentOrders(page, size);
+        return ResponseEntity.ok(orders);
     }
 }
