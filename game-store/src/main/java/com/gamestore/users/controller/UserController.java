@@ -33,6 +33,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserPageResponse> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/toggle-admin")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> toggleAdminRole(
             @PathVariable Long id,
             @RequestParam boolean idAdmin
@@ -64,13 +65,14 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/status")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> updateUserStatus(
             @PathVariable Long id,
             @RequestParam boolean active) {

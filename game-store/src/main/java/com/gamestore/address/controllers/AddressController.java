@@ -22,9 +22,8 @@ public class AddressController {
     private final AddressService addressService;
     private final AuthenticationHelper authHelper;
 
-    // Solo administradores pueden ver todas las direcciones
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AddressPageResponseDto> getAllAddresses(
             @RequestParam(defaultValue = "0") @Min(value = 0) int page,
             @RequestParam(defaultValue = "10") @Min(value = 1) int size) {
@@ -32,15 +31,13 @@ public class AddressController {
         return ResponseEntity.ok(addresses);
     }
 
-    // Ver dirección específica - solo admin o propietario
     @GetMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isAddressOwner(#id, principal)")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isAddressOwner(#id, principal)")
     public ResponseEntity<AddressResponseDto> getAddressById(@PathVariable Long id) {
         AddressResponseDto address = addressService.getAddressById(id);
         return ResponseEntity.ok(address);
     }
 
-    // Ver mi dirección como usuario autenticado
     @GetMapping("/user")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AddressResponseDto> getMyAddress() {
@@ -54,7 +51,6 @@ public class AddressController {
         }
     }
 
-    // Crear o actualizar mi dirección
     @PutMapping("/user")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AddressResponseDto> createOrUpdateAddress(
@@ -64,7 +60,6 @@ public class AddressController {
         return ResponseEntity.ok(updatedAddress);
     }
 
-    // Eliminar mi dirección
     @DeleteMapping("/user")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteMyAddress() {
@@ -79,11 +74,10 @@ public class AddressController {
         }
     }
 
-    // Solo admin puede eliminar cualquier dirección
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
-        addressService.deleteAddress(id, null); // null indica que es admin
+        addressService.deleteAddress(id, null);
         return ResponseEntity.noContent().build();
     }
 }

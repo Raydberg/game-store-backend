@@ -15,6 +15,6 @@ public class UserProfileDto {
     private String lastName;
     private String phone;
     private Set<String> roles;
-    private AddressResponseDto address; 
+    private AddressResponseDto address;
     private boolean active;
 }

@@ -49,7 +49,7 @@ public class OrderController {
     }
 
     @GetMapping
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderPageResponseDto> getAllOrders(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
@@ -58,14 +58,13 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderSummaryResponseDto> getOrderById(@PathVariable Long orderId) {
         OrderSummaryResponseDto order = orderService.getOrderById(orderId, null); // null indica que es admin
         return ResponseEntity.ok(order);
     }
 
     @PatchMapping("/{orderId}/status")
-    // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderSummaryResponseDto> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam String status) {
@@ -97,7 +96,7 @@ public class OrderController {
     }
 
     @GetMapping("/latest-by-user")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderPageResponseDto> getLatestOrdersByUser(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
@@ -106,7 +105,7 @@ public class OrderController {
     }
 
     @GetMapping("/recent")
-    // @PreAuthorize("hasRole('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderPageResponseDto> getRecentOrders(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
