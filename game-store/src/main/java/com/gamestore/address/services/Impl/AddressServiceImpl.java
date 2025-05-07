@@ -54,16 +54,13 @@ public class AddressServiceImpl implements AddressService {
         UserModel user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con ID: " + userId));
 
-        // Buscar si el usuario ya tiene una dirección
         UserAddress existingAddress = addressRepository.findByUserId(userId).orElse(null);
 
         if (existingAddress != null) {
-            // Actualizar dirección existente
             addressMapper.updateAddressFromDto(dto, existingAddress);
             UserAddress updatedAddress = addressRepository.save(existingAddress);
             return addressMapper.toAddressResponseDto(updatedAddress);
         } else {
-            // Crear nueva dirección
             UserAddress newAddress = addressMapper.toAddressEntity(dto);
             newAddress.setUser(user);
             UserAddress savedAddress = addressRepository.save(newAddress);
@@ -93,7 +90,6 @@ public class AddressServiceImpl implements AddressService {
         UserAddress address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new RuntimeException("Dirección no encontrada con ID: " + addressId));
 
-        // Solo el propietario o un admin pueden eliminar la dirección
         if (!address.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("No tienes permiso para eliminar esta dirección");
         }

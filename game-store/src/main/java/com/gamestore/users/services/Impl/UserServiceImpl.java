@@ -119,13 +119,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario con ID " + id + " no encontrado."));
     }
 
-    // Añadir el nuevo método a la implementación existente
     @Override
     @Transactional
     public UserResponseDto updateUserStatus(Long id, boolean active) {
         UserModel user = findUserOrThrow(id);
 
-        // No permitir desactivar el último usuario administrador
         if (!active && isLastAdmin(user)) {
             throw new RuntimeException("No se puede desactivar el último administrador");
         }
@@ -136,18 +134,15 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isLastAdmin(UserModel user) {
-        // Verificar si el usuario es admin
         boolean isAdmin = user.getRoles().stream()
                 .anyMatch(role -> role.getEnumRole() == EnumRole.ADMIN);
 
         if (!isAdmin) {
-            return false; // Si no es admin, no hay problema
+            return false;
         }
 
-        // Contar admins activos
         long activeAdminsCount = userRepository.countByRolesEnumRoleAndActive(EnumRole.ADMIN, true);
 
-        // Si hay solo 1 admin activo y es este usuario, entonces es el último
         return activeAdminsCount <= 1;
     }
 }

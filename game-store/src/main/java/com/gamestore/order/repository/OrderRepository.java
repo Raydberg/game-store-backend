@@ -21,6 +21,5 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     @Query("SELECT o FROM Order o WHERE o.createdAt = (SELECT MAX(o2.createdAt) FROM Order o2 WHERE o2.user.id = o.user.id) ORDER BY o.createdAt DESC")
     List<Order> findLatestOrdersForAllUsers(Pageable pageable);
     
-    // Encontrar la última orden general (la más reciente de todas)
     Optional<Order> findTopByOrderByCreatedAtDesc();
 }

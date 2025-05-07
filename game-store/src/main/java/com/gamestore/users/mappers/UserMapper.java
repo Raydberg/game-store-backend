@@ -30,7 +30,7 @@ public abstract class UserMapper {
 
     @Mapping(target = "roles", source = "roles", qualifiedByName = "rolesToStringSet")
     @Mapping(target = "address", expression = "java(getFirstAddress(userModel))")
-    @Mapping(target = "active", source = "active") // Mapear también en el perfil del usuario
+    @Mapping(target = "active", source = "active")
 
     public abstract UserProfileDto toProfileDto(UserModel userModel);
 

@@ -46,16 +46,13 @@ public class CartServiceImpl implements CartService {
         Product product = productRepository.findById(itemDto.productId())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + itemDto.productId()));
 
-        // Verificar stock disponible
         if (product.getStock() < itemDto.quantity()) {
             throw new RuntimeException("Stock insuficiente. Disponible: " + product.getStock());
         }
 
-        // Buscar si el producto ya está en el carrito
         CartItem existingItem = cartItemRepository.findByCartAndProduct(cart, product).orElse(null);
 
         if (existingItem != null) {
-            // Actualizar cantidad
             int newQuantity = existingItem.getQuantity() + itemDto.quantity();
             if (product.getStock() < newQuantity) {
                 throw new RuntimeException("Stock insuficiente para la cantidad total. Disponible: " + product.getStock());
@@ -84,18 +81,15 @@ public class CartServiceImpl implements CartService {
         CartItem item = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Item del carrito no encontrado: " + itemId));
 
-        // Verificar que el item pertenece al carrito del usuario
         if (!item.getCart().getId().equals(cart.getId())) {
             throw new RuntimeException("El item no pertenece al carrito del usuario");
         }
 
-        // Verificar stock disponible
         if (item.getProduct().getStock() < quantity) {
             throw new RuntimeException("Stock insuficiente. Disponible: " + item.getProduct().getStock());
         }
 
         if (quantity <= 0) {
-            // Eliminar item si cantidad es 0 o negativa
             cartItemRepository.delete(item);
         } else {
             // Actualizar cantidad
@@ -115,7 +109,6 @@ public class CartServiceImpl implements CartService {
         CartItem item = cartItemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Item del carrito no encontrado: " + itemId));
 
-        // Verificar que el item pertenece al carrito del usuario
         if (!item.getCart().getId().equals(cart.getId())) {
             throw new RuntimeException("El item no pertenece al carrito del usuario");
         }
@@ -137,9 +130,7 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    /**
-     * Busca el carrito del usuario o crea uno nuevo si no existe
-     */
+
     private Cart findOrCreateCart(Long userId) {
         UserModel user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + userId));
