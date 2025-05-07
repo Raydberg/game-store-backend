@@ -36,7 +36,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {}) // Habilitar CORS explícitamente
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         // .requestMatchers("/auth/**", "/swagger-ui/**",
@@ -69,21 +68,6 @@ public class SecurityConfig {
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
-    }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:4200"); // Específica mejor que usar wildcard
-        // Si necesitas más orígenes, agrégalos de manera explícita
-        // config.addAllowedOrigin("https://tu-dominio-produccion.com");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        config.addExposedHeader("Authorization"); // Si usas este encabezado
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
     }
 
 }
