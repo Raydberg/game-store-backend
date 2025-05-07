@@ -32,7 +32,6 @@ public class CartServiceImpl implements CartService {
     private final CartMapper cartMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public CartResponseDto getUserCart(Long userId) {
         Cart cart = findOrCreateCart(userId);
         List<CartItem> items = cartItemRepository.findByCartId(cart.getId().longValue());

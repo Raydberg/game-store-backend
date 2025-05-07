@@ -1,0 +1,66 @@
+server:
+  port: 9090
+
+spring:
+  cloud:
+    gateway:
+      csrf:
+        enabled: false
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders: "*"
+            allowCredentials: true
+      default-filters:
+        - StripPrefix=1
+      routes:
+        - id: auth
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/auth/**
+
+        - id: address
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/addresses/**
+
+        - id: cart
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/cart/**
+
+
+        - id: category
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/category/**
+
+
+        - id: orders
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/orders/**  
+
+
+        - id: product
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/product/**   
+
+        - id: users
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/users/** 
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG

@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {AddressMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", uses = { AddressMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
 
     @Autowired
@@ -30,6 +30,8 @@ public abstract class UserMapper {
 
     @Mapping(target = "roles", source = "roles", qualifiedByName = "rolesToStringSet")
     @Mapping(target = "address", expression = "java(getFirstAddress(userModel))")
+    @Mapping(target = "active", source = "active") // Mapear también en el perfil del usuario
+
     public abstract UserProfileDto toProfileDto(UserModel userModel);
 
     @Named("rolesToStringSet")
@@ -37,8 +39,8 @@ public abstract class UserMapper {
         return roles == null
                 ? Collections.emptySet()
                 : roles.stream()
-                .map(r -> r.getEnumRole().name())
-                .collect(Collectors.toSet());
+                        .map(r -> r.getEnumRole().name())
+                        .collect(Collectors.toSet());
     }
 
     public AddressResponseDto getFirstAddress(UserModel userModel) {
