@@ -1,10 +1,10 @@
-INSERT INTO categories (name, description)
+INSERT INTO categories (name, description,active)
 VALUES
-    ('Smartphones',            'Dispositivos móviles inteligentes con pantallas táctiles, conectividad 4G/5G y cámaras avanzadas'),
-    ('Laptops & Computers',    'Ordenadores portátiles y de sobremesa para uso profesional, gaming y multimedia'),
-    ('Wearables',              'Tecnología vestible como smartwatches, pulseras de actividad y auriculares inteligentes'),
-    ('Networking & Storage',   'Equipos de red y soluciones de almacenamiento, incluyendo routers, switches y discos SSD/HDD'),
-    ('Accessories & Peripherals','Accesorios y periféricos: cargadores, teclados, ratones, fundas y adaptadores');
+    ('Smartphones',            'Dispositivos móviles inteligentes con pantallas táctiles, conectividad 4G/5G y cámaras avanzadas',true),
+    ('Laptops & Computers',    'Ordenadores portátiles y de sobremesa para uso profesional, gaming y multimedia',true),
+    ('Wearables',              'Tecnología vestible como smartwatches, pulseras de actividad y auriculares inteligentes',true),
+    ('Networking & Storage',   'Equipos de red y soluciones de almacenamiento, incluyendo routers, switches y discos SSD/HDD',true),
+    ('Accessories & Peripherals','Accesorios y periféricos: cargadores, teclados, ratones, fundas y adaptadores',true);
 
 INSERT INTO products (price, stock, category_id, description, image_url, name,active)
 VALUES

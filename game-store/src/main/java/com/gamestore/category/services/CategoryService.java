@@ -5,7 +5,9 @@ import com.gamestore.category.DTOs.CategoryRequestDto;
 import com.gamestore.category.DTOs.CategoryResponseDto;
 
 public interface CategoryService {
-    CategoryPageResponseDto findAllCategory(int page, int size);
+    CategoryPageResponseDto findAllActiveCategories(int page, int size);
+    
+    CategoryPageResponseDto findAllCategories(int page, int size);
 
     CategoryResponseDto findCategoryById(Long id);
 
@@ -14,4 +16,6 @@ public interface CategoryService {
     CategoryResponseDto updateCategory(Long id, CategoryRequestDto dto);
 
     void deleteCategory(Long id);
+    
+    CategoryResponseDto toggleCategoryStatus(Long id, boolean active);
 }

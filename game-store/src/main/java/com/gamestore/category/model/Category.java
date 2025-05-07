@@ -22,7 +22,7 @@ public class Category {
     private String description;
     @Builder.Default
     private Instant createAt = Instant.now();
-
+    private boolean active = true;
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 }

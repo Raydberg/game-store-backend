@@ -7,18 +7,17 @@ import com.gamestore.category.mappers.CategoryMapper;
 import com.gamestore.category.model.Category;
 import com.gamestore.category.repository.CategoryRepository;
 import com.gamestore.category.services.CategoryService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +30,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public CategoryPageResponseDto findAllCategory(int page, int size) {
+    public CategoryPageResponseDto findAllActiveCategories(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Category> categoryPage = categoryRepository.findByActive(true, pageable);
+        List<CategoryResponseDto> categoryDto = categoryPage
+                .stream()
+                .map(categoryMapper::toCategoryResponseDto)
+                .collect(Collectors.toList());
+
+        return new CategoryPageResponseDto(
+                categoryDto, categoryPage.getTotalPages(), categoryPage.getTotalElements()
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CategoryPageResponseDto findAllCategories(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         List<CategoryResponseDto> categoryDto = categoryPage
@@ -43,8 +57,6 @@ public class CategoryServiceImpl implements CategoryService {
                 categoryDto, categoryPage.getTotalPages(), categoryPage.getTotalElements()
         );
     }
-
-
 
     @Override
     @Transactional(readOnly = true)
@@ -73,13 +85,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCategory(Long id) {
-        var category = findCategoryById(id);
-        categoryRepository.deleteById(id);
+        var category = findExistOrThrow(id);
+        category.setActive(false);
+        categoryRepository.save(category);
+    }
+    
+    @Override
+    @Transactional
+    public CategoryResponseDto toggleCategoryStatus(Long id, boolean active) {
+        Category category = findExistOrThrow(id);
+        category.setActive(active);
+        Category savedCategory = categoryRepository.save(category);
+        return categoryMapper.toCategoryResponseDto(savedCategory);
     }
 
     private Category findExistOrThrow(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoría con id " + id + " no encontrada"));
     }
-
 }

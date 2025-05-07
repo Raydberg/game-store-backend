@@ -20,20 +20,29 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("")
-    public ResponseEntity<CategoryPageResponseDto> getAllCartShop(
+    public ResponseEntity<CategoryPageResponseDto> getAllCategory(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "La página debe ser 0 o mayor") int page,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1") int size
     ) {
-        var response = categoryService.findAllCategory(page, size);
+        var response = categoryService.findAllActiveCategories(page, size);
+        return ResponseEntity.ok(response);
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<CategoryPageResponseDto> getAllCategoryAdmin(
+            @RequestParam(defaultValue = "0") @Min(value = 0, message = "La página debe ser 0 o mayor") int page,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1") int size
+    ) {
+        var response = categoryService.findAllCategories(page, size);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CategoryResponseDto> getCartById(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponseDto> getCategoryById(@PathVariable Long id) {
         var response = categoryService.findCategoryById(id);
         return ResponseEntity.ok(response);
     }
-
 
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
@@ -55,5 +64,14 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
-
+    
+    // Agregar endpoint para activar/desactivar categoría
+    @PatchMapping("{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CategoryResponseDto> updateCategoryStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active) {
+        CategoryResponseDto updatedCategory = categoryService.toggleCategoryStatus(id, active);
+        return ResponseEntity.ok(updatedCategory);
+    }
 }
