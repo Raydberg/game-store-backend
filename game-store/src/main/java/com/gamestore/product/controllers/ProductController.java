@@ -89,4 +89,30 @@ public class ProductController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProductResponseDto> updateProductStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active) {
+        ProductResponseDto updatedProduct = productService.toggleProductStatus(id, active);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/filter-admin")
+    public ResponseEntity<ProductPageResponseDto> getAllProductsWithFiltersAdmin(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String sortDirection,
+            @RequestParam(defaultValue = "0") @Min(value = 0, message = "La página debe ser 0 o mayor") int page,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "El tamaño debe ser al menos 1") int size) {
+
+        ProductPageResponseDto response = productService.findProductsWithFilter(
+                page, size, categoryId, minPrice, maxPrice, sortBy, sortDirection);
+
+        return ResponseEntity.ok(response);
+    }
 }

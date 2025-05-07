@@ -79,8 +79,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProduct(Long id) {
-        var product = findExistOrThrow(id);
-        productRepository.delete(product);
+        Product product = findExistOrThrow(id);
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     private Product findExistOrThrow(Long id) {
@@ -115,7 +116,6 @@ public class ProductServiceImpl implements ProductService {
 
         Pageable pageable = createPageableWithSort(page, size, sortBy, sortDirection);
 
-        // Usar Specification para filtros dinámicos
         Specification<Product> spec = Specification.where(null);
 
         if (categoryId != null) {
@@ -147,6 +147,46 @@ public class ProductServiceImpl implements ProductService {
             sort = sort.ascending();
         }
         return PageRequest.of(page, size, sort);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductPageResponseDto findProductsWithFilterAdmin(int page, int size, Long categoryId,
+            BigDecimal minPrice, BigDecimal maxPrice, String sortBy, String sortDirection) {
+
+        Pageable pageable = createPageableWithSort(page, size, sortBy, sortDirection);
+
+        // Para admin, no filtramos por active
+        Specification<Product> spec = Specification.where(null);
+
+        if (categoryId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("category").get("id"), categoryId));
+        }
+
+        if (minPrice != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+        }
+
+        if (maxPrice != null) {
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+        }
+
+        Page<Product> productPage = productRepository.findAll(spec, pageable);
+
+        List<ProductResponseDto> productsDto = productPage.stream()
+                .map(productMapper::toProductResponseDto)
+                .collect(Collectors.toList());
+
+        return new ProductPageResponseDto(productsDto, page, productPage.getTotalElements());
+    }
+
+    @Override
+    @Transactional
+    public ProductResponseDto toggleProductStatus(Long id, boolean active) {
+        Product product = findExistOrThrow(id);
+        product.setActive(active);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toProductResponseDto(savedProduct);
     }
 
 }

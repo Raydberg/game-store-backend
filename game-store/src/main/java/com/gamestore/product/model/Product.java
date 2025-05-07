@@ -29,7 +29,7 @@ public class Product {
 
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
-
+    private boolean active = true;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

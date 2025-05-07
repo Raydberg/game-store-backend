@@ -14,6 +14,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
     @Mapping(target = "category", expression = "java(product.getCategory() != null ? product.getCategory().getName() : null)")
+   @Mapping(target = "active", source = "active")
     ProductResponseDto toProductResponseDto(Product product);
 
     @Mapping(target = "id", ignore = true)

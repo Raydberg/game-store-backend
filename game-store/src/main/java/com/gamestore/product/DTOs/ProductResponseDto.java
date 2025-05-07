@@ -11,7 +11,8 @@ public record ProductResponseDto(
         BigDecimal price,
         Integer stock,
         Instant createdAt,
-        String category
+        String category,
+        boolean active
 ) {
 
 }
